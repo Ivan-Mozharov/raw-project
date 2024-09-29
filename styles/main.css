@@ -56,9 +56,10 @@ border: none;
 /* карусель */
 .wrapper {
         margin: 0 auto;
-        width: 700px;
-        height: 400px;
-        border: none;
+        wigth: 700;
+        height: 400;
+        border: none
+
 
       }
       .exmpl {
@@ -66,20 +67,20 @@ border: none;
         display: flex;
         justify-content: center;
         align-items: center;
+
       }
       .exmpl img {
-         height: 100%;
+        height: 100%;
         width: auto;
-      }
+        }
 .center {
   padding: 0 40px;
   text-align: center;
   max-width: 100%;
-
-  position: relative;
+    position: relative;
 }
-
 .center img {
   max-width: 100%;
   height: auto;
 }
+
