@@ -28,6 +28,9 @@ class App:
         # кнопка загрузки
         self.btn = Button(text='Загрузить', command=self.load)
         self.btn.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
+        # кнопка отражения по горизонтали
+        self.flp = Button(text='Отразить', command=self.flip)
+        self.flp.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
         # Резкость
         self.shrp = Button(text='Резкость', command=self.sharp)
         self.shrp.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
@@ -80,6 +83,12 @@ class App:
         except AttributeError:  # не удалось подгрузить
             self.image = ImageTk.PhotoImage(self.empty)
             self.canvas.create_image(0,0, anchor=NW, image=self.image)
+
+    # Функционал кнопки отразить
+    def flip(self):
+        flp_img = self.empty.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+        self.image = ImageTk.PhotoImage(flp_img)
+        self.canvas.create_image(self.left, self.top, anchor=NW, image=self.image)
 
     # Фунционал кнопки "Размытия"
     def blur(self):
