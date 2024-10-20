@@ -22,7 +22,7 @@ class App:
 
      # добавляем изображение на холст
         self.canvas = tkinter.Canvas(self.root, height=300, width=400)
-        self.image = Image.open('images/картинка_2.jpg')
+        self.image = Image.open('картинка_2.jpg')
         self.photo = ImageTk.PhotoImage(self.image)
         self.image = self.canvas.create_image(0,0, anchor='nw', image=self.photo)
         self.canvas.grid(row=2, column=1)
