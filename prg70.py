@@ -27,25 +27,29 @@ class App:
         self.canvas.pack(anchor=CENTER, pady=20)
         # кнопка загрузки
         self.btn = Button(text='Загрузить', command=self.load)
-        self.btn.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
+        self.btn.pack(side=LEFT, anchor=N, padx=20, fill=X, expand=True)
         # кнопка отражения по горизонтали
         self.flp = Button(text='Отразить', command=self.flip)
-        self.flp.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
+        self.flp.pack(side=LEFT, anchor=N, padx=20, fill=X, expand=True)
         # Резкость
         self.shrp = Button(text='Резкость', command=self.sharp)
-        self.shrp.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
+        self.shrp.pack(side=LEFT, anchor=N, padx=20, fill=X, expand=True)
         # Размыть
         self.blur = Button(text='Размыть', command=self.blur)
-        self.blur.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
+        self.blur.pack(side=LEFT, anchor=N, padx=20, fill=X, expand=True)
         # Оригинал
         self.orig = Button(text='Оригинал', command=self.back)
-        self.orig.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
+        self.orig.pack(side=LEFT, anchor=N, padx=20, fill=X, expand=True)
         # поменять фон
         self.rect_btn = Button(text='Поменять фон', command=self.make_rect)
-        self.rect_btn.pack(side=LEFT, anchor=N, padx=30, fill=X, expand=True)
+        self.rect_btn.pack(side=LEFT, anchor=N, padx=20, fill=X, expand=True)
 
+        self.save_btn = Button(text='Сохранить', command=lambda: self.load_save('save'))
+        self.save_btn.pack(side=LEFT, anchor=N, padx=20, fill=X, expand=True)
+        self.save_btn['state'] = DISABLED
         # self.btn.bind('<ButtonPress-1>', self.load)
         self.left, self.top = 0, 0 # тщчки привязки к холсту
+        self.ext = '' # Расширние файла картинки
         self.image = None
         self.empty = Image.new('RGB',(600, 400), (255, 255, 255)) #пустышка
         self.root.mainloop()
@@ -58,6 +62,8 @@ class App:
                                                       ('JPEG', '*.jpg'),
                                                       ('PNG', '*.png')
                                                   )) # диалог открытия картинки
+            self.ext = fullpath.split('.')[-1] # получаем расширение из пути
+            # print(self.ext)
             self.empty = Image.open(fullpath)
             mode = self.empty.mode  # получаем цветовую схему
             if mode == 'P':  # 256-color index image
@@ -89,12 +95,14 @@ class App:
         flp_img = self.empty.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
         self.image = ImageTk.PhotoImage(flp_img)
         self.canvas.create_image(self.left, self.top, anchor=NW, image=self.image)
+        self.save_btn['state'] = NORMAL
 
     # Фунционал кнопки "Размытия"
     def blur(self):
         blur_img = self.empty.filter(ImageFilter.GaussianBlur(5))
         self.image = ImageTk.PhotoImage(blur_img)
         self.canvas.create_image(self.left, self.top, anchor=NW, image=self.image)
+        self.save_btn['state'] = NORMAL
 
  # Фунционал кнопки "Резкость"
     def sharp(self):
@@ -102,11 +110,27 @@ class App:
         sharp_img = sharper.enhance(5.0)
         self.image = ImageTk.PhotoImage(sharp_img)
         self.canvas.create_image(self.left, self.top, anchor=NW, image=self.image)
+        self.save_btn['state'] = NORMAL
 
     # Функционал кнопки "к оригиналу"
     def back(self):
         self.image = ImageTk.PhotoImage(self.empty)
         self.canvas.create_image(self.left, self.top, anchor=NW, image=self.image)
+        self.save_btn['state'] = DISABLED
+
+    def load_save(self, *args):
+        if len(args) == 1 and args[0] == 'save':
+            # print(args[0])
+            fullpath = filedialog.asksaveasfilename(initialfile=f'result.{self.ext}')
+            if fullpath != '':
+                if f'.{self.ext}' not in fullpath:
+                    fullpath += self.ext
+                res = ImageTk.getimage(self.image)
+                if res.mode == 'RGBA' and 'jp' in self.ext:
+                    res = res.convert('RGB')
+                res.save(fullpath)
+                self.save_btn['state'] = DISABLED
+
 
     # Фунционал кнопки "поменять фон"
     def make_rect(self):
@@ -114,6 +138,8 @@ class App:
                                      outline='#004D40',
                                      fill='red',
                                      width=7)
+        self.save_btn['state'] = NORMAL
+
 
 
 app = App()
