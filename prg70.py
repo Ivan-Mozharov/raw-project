@@ -116,6 +116,7 @@ class App:
     def back(self):
         self.image = ImageTk.PhotoImage(self.empty)
         self.canvas.create_image(self.left, self.top, anchor=NW, image=self.image)
+
         self.save_btn['state'] = DISABLED
 
     def load_save(self, *args):
