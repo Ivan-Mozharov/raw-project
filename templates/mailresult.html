@@ -9,6 +9,8 @@
 <h5>Отправлено со страницы: {{ params['page'] }}</h5>
 {% endblock %}
 
+<script> document.oncontextmenu = cmenu; function cmenu() { return false; } </script>
+
 {% block footer %}
 <!--подвал-->
 <br>
